@@ -1,3 +1,3 @@
-# int-pro
+# ind-pro
 
 Homework on industrial programming
