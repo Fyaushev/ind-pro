@@ -18,7 +18,6 @@ date: 19.02.2020
 
 using namespace std;
 
-
 set<char> VALIDATE = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
 // Проверка корректности ввода:
@@ -62,7 +61,6 @@ int main() {
 	cout << endl;
 	return 0;
 }
-
 
 char Validate(const string &input) {
 	int i = 0;
