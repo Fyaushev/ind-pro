@@ -1,4 +1,3 @@
-/**
 * @brief
 *		Find errors and decrease probability of getting errors of the same kind in the future
 *		This piece of code won't compile and it doesn't describe an entire algorithm: just part of some page storage
@@ -12,7 +11,7 @@
 
 enum PAGE_COLOR
 {
-	PG_COLOR_GREEN = 1, /* page may be released without high overhead */
+	PG_COLOR_GREEN = 0, /* page may be released without high overhead */
 	PG_COLOR_YELLOW, /* nice to have */
 	PG_COLOR_RED	/* page is actively used */
 };
@@ -34,7 +33,7 @@ union PageKey
 
 
 /* Prepare from 2 chars the key of the same configuration as in PageKey */
-#define CALC_PAGE_KEY( Addr, Color )	(  (Color) + (Addr) << 8 ) 
+#define CALC_PAGE_KEY( Addr, Color )	(  (Color) + (Addr) << 8 )
 
 
 /**
@@ -60,12 +59,12 @@ static PageDesc* PageStrg[ 3 ];
 
 void PageStrgInit()
 {
-	memset( PageStrg, 0, sizeof(&PageStrg) );
+	memset( PageStrg, 0, 3*sizeof(PageStrg) );//
 }
 
 PageDesc* PageFind( void* ptr, char color )
 {
-	for( PageDesc* Pg = PageStrg[color]; Pg; Pg = Pg->next );
+	for( PageDesc* Pg = PageStrg[color]; Pg != NULL; Pg = Pg->next )//
         if( Pg->uKey == CALC_PAGE_KEY(ptr,color) )
            return Pg;                                                                                                                                     
     return NULL;
@@ -77,12 +76,12 @@ PageDesc* PageReclaim( UINT cnt )
 	PageDesc* Pg;
 	while( cnt )
 	{
-		Pg = Pg->next;
+		Pg = Pg->next; // Неинициализированная переменная
 		PageRemove( PageStrg[ color ] );
 		cnt--;
 		if( Pg == NULL )
 		{
-			color++;
+			color++; // Не должен превышать 3
 			Pg = PageStrg[ color ];
 		}
 	}
@@ -92,7 +91,7 @@ PageDesc* PageInit( void* ptr, UINT color )
 {
     PageDesc* pg = new PageDesc;
     if( pg )
-        PAGE_INIT(&pg, ptr, color);
+        PAGE_INIT(pg, ptr, color);//
     else
         printf("Allocation has failed\n");
     return pg;
@@ -107,17 +106,18 @@ void PageDump()
 	#define PG_COLOR_NAME(clr) #clr
 	char* PgColorName[] = 
 	{
-		PG_COLOR_NAME(PG_COLOR_RED),
+		PG_COLOR_NAME(PG_COLOR_GREEN),
 		PG_COLOR_NAME(PG_COLOR_YELLOW),
-		PG_COLOR_NAME(PG_COLOR_GREEN)
+		PG_COLOR_NAME(PG_COLOR_RED)
 	};
 
 	while( color <= PG_COLOR_RED )
 	{
 		printf("PgStrg[(%s) %u] ********** \n", color, PgColorName[color] );
-		for( PageDesc* Pg = PageStrg[++color]; Pg != NULL; Pg = Pg->next )
+		for( PageDesc* Pg = PageStrg[color++]; Pg != NULL; Pg = Pg->next )//
 		{
 			if( Pg->uAddr = NULL )
+			if( Pg->uAddr == NULL ) //!!!!!!!!!!!!!
 				continue;
 
 			printf("Pg :Key = 0x%x, addr %p\n", Pg->uKey, Pg->uAddr );
