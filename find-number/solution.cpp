@@ -35,7 +35,7 @@ int main() {
 	string str_n, str_m;
 	cin >> str_n;
 	cin >> str_m;
-	if(!Validate(str_n) || !Validate(str_n)) {
+	if(Validate(str_m) || Validate(str_n)) {
 		cout << "input error" << endl;
 		return 1;
 	}
@@ -45,16 +45,22 @@ int main() {
 		cout << "input error" << endl;
 		return 0;
 	} 
-	vector <long long> v(n);
+	vector <string> v(n);
+	vector <long long> w(n);
 	for (long long i = 0; i < n; i++) {
 		cin >> v[i];
-		if(!Validate(to_string(v[i])) || v[i] < 0) {
+		if(Validate(v[i])) {
+			cout << "input error" << endl;
+			return 1;
+		}
+		w[i] = stoll(v[i]);
+		if(w[i] < 0) {
 			cout << "input error" << endl;
 			return 1;
 		}
 	}
 
-	vector <long long> ans = find_number(m, v);
+	vector <long long> ans = find_number(m, w);
 	for (const auto &i : ans) {
 		cout << i << " ";
 	}
