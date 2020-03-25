@@ -33,8 +33,8 @@ vector<long long> find_number(const int m,const vector <long long> &v);
 
 int main() {
 	string str_n, str_m;
-	cin >> str_n;
 	cin >> str_m;
+	cin >> str_n;
 	if(Validate(str_m) || Validate(str_n)) {
 		cout << "input error" << endl;
 		return 1;
